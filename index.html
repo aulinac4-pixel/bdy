@@ -3,547 +3,594 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happiest Bday Jejen! 🎂✨</title>
+    <title>Happiest Bday Jejen! 🩵 Sweet 17th</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Quicksand:wght@400;600;700&family=Sacramento&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Mali:ital,wght@0,500;0,700;1,500&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         body {
             font-family: 'Quicksand', sans-serif;
-            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 50%, #bae6fd 100%);
-            color: #0369a1;
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 35%, #e0f2fe 70%, #bae6fd 100%);
+            color: #0284c7;
             overflow-x: hidden;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%2338bdf8"><path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/></svg>'), auto;
         }
 
-        .font-cute {
-            font-family: 'Fredoka One', cursive;
+        .font-cute { font-family: 'Fredoka', cursive; }
+        .font-handwriting { font-family: 'Mali', cursive; }
+
+        /* Canvas Trail */
+        #trailCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
         }
 
-        .font-handwriting {
-            font-family: 'Sacramento', cursive;
-        }
-
-        /* Floating Animation */
-        @keyframes float {
+        /* Animations */
+        @keyframes bounce-gentle {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-12px) rotate(2deg); }
+            50% { transform: translateY(-12px) rotate(3deg); }
         }
-        .animate-float {
-            animation: float 4s ease-in-out infinite;
+        .animate-bounce-gentle { animation: bounce-gentle 3.2s ease-in-out infinite; }
+
+        @keyframes float-cloud {
+            0%, 100% { transform: translateX(0px); }
+            50% { transform: translateX(25px); }
+        }
+        .animate-cloud { animation: float-cloud 7s ease-in-out infinite; }
+
+        /* Polaroid Hover Effect */
+        .polaroid-frame {
+            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 12px 25px -5px rgba(56, 189, 248, 0.25);
+        }
+        .polaroid-frame:hover {
+            transform: translateY(-10px) scale(1.04) rotate(0deg) !important;
+            box-shadow: 0 22px 35px -8px rgba(14, 165, 233, 0.35);
+            z-index: 30;
         }
 
-        @keyframes float-slow {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+        /* Flame animation */
+        @keyframes flameFlicker {
+            0%, 100% { transform: scale(1) rotate(-3deg); filter: drop-shadow(0 0 10px #fbbf24); }
+            50% { transform: scale(1.2) rotate(3deg); filter: drop-shadow(0 0 16px #f59e0b); }
         }
-        .animate-float-slow {
-            animation: float-slow 6s ease-in-out infinite;
-        }
-
-        @keyframes pulse-subtle {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        .animate-pulse-subtle {
-            animation: pulse-subtle 2s ease-in-out infinite;
-        }
-
-        /* Candle Flame Flicker */
-        @keyframes flicker {
-            0%, 100% { transform: scale(1) rotate(-2deg); opacity: 0.9; }
-            25% { transform: scale(1.1) rotate(2deg); opacity: 1; }
-            50% { transform: scale(0.95) rotate(-1deg); opacity: 0.8; }
-            75% { transform: scale(1.05) rotate(1deg); opacity: 1; }
-        }
-        .flame {
-            animation: flicker 0.6s infinite alternate;
+        .flame-anim {
+            animation: flameFlicker 0.35s infinite alternate;
             transform-origin: center bottom;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #e0f2fe;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #7dd3fc;
-            border-radius: 10px;
-        }
-
-        /* Polaroid Hover Effect */
-        .polaroid {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.15), 0 8px 10px -6px rgba(14, 165, 233, 0.1);
-        }
-        .polaroid:hover {
-            transform: translateY(-8px) scale(1.03) rotate(0deg) !important;
-            box-shadow: 0 20px 30px -10px rgba(14, 165, 233, 0.3);
-            z-index: 20;
-        }
-
-        /* Subtle Glow */
-        .glow-blue {
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
-        }
-
-        /* Hidden easter egg text style */
-        .secret-subtle-text {
-            color: rgba(56, 189, 248, 0.15);
-            transition: color 0.5s ease;
+        /* Ultra subtle i miss u blend style - extremely subtle */
+        .subtle-miss-u {
+            color: #dbeafe;
+            font-size: 0.7rem;
+            font-weight: 400;
             user-select: none;
+            transition: color 0.5s ease;
+            cursor: default;
         }
-        .secret-subtle-text:hover {
-            color: rgba(3, 105, 161, 0.8);
+        .subtle-miss-u:hover {
+            color: #93c5fd;
         }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f0f9ff; }
+        ::-webkit-scrollbar-thumb { background: #7dd3fc; border-radius: 20px; }
     </style>
 </head>
 <body class="min-h-screen relative pb-20">
 
-    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <!-- Clouds -->
-        <div class="absolute top-10 left-5 text-white/60 text-6xl animate-float-slow"><i class="fa-solid font-cloud"></i>☁️</div>
-        <div class="absolute top-32 right-10 text-white/70 text-7xl animate-float-slow" style="animation-delay: 2s;">☁️</div>
-        <div class="absolute bottom-20 left-12 text-white/50 text-8xl animate-float-slow" style="animation-delay: 4s;">☁️</div>
+    <canvas id="trailCanvas"></canvas>
 
-        <!-- Floating Hearts & Sparkles Background -->
-        <div class="absolute top-1/4 left-1/12 text-sky-300/40 text-2xl animate-float">✨</div>
-        <div class="absolute top-1/3 right-1/6 text-sky-400/40 text-3xl animate-float" style="animation-delay: 1s;">🩵</div>
-        <div class="absolute bottom-1/3 left-1/5 text-blue-300/40 text-2xl animate-float" style="animation-delay: 3s;">🤍</div>
-        <div class="absolute bottom-1/4 right-1/12 text-sky-300/40 text-3xl animate-float" style="animation-delay: 2s;">✨</div>
+    <!-- Floating Background Decor -->
+    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div class="absolute top-8 left-4 text-white/80 text-7xl animate-cloud">☁️</div>
+        <div class="absolute top-20 right-8 text-white/80 text-8xl animate-cloud" style="animation-delay: 2.5s;">☁️</div>
+        <div class="absolute top-1/2 left-3 text-sky-200/60 text-6xl animate-bounce-gentle">✨</div>
+        <div class="absolute top-1/3 right-6 text-sky-300/70 text-5xl animate-bounce-gentle" style="animation-delay: 1.2s;">🩵</div>
+        <div class="absolute bottom-24 left-8 text-sky-200/70 text-6xl animate-bounce-gentle" style="animation-delay: 2.8s;">🌸</div>
+        <div class="absolute bottom-36 right-12 text-white/70 text-8xl animate-cloud" style="animation-delay: 4.5s;">☁️</div>
     </div>
 
+    <!-- Header Navigation -->
     <header class="relative z-30 pt-6 px-4 max-w-4xl mx-auto flex justify-between items-center">
-        <div class="flex items-center gap-2 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full border border-sky-100 shadow-sm">
-            <span class="text-xl">🎂</span>
-            <span class="font-cute text-sky-600 text-sm md:text-base">09 Oktober 2009</span>
+        <div class="flex items-center gap-2 bg-white/90 backdrop-blur-md px-5 py-2.5 rounded-full border-2 border-sky-200 shadow-sm animate-bounce-gentle">
+            <span class="text-2xl">🎀</span>
+            <div>
+                <span class="font-cute text-sky-600 text-xs sm:text-sm block leading-none">Sweet Seventeen</span>
+                <span class="font-bold text-sky-400 text-[10px]">09 OKTOBER 2009</span>
+            </div>
         </div>
-        
-        <div class="flex items-center gap-3">
-            <button id="musicToggleBtn" onclick="toggleAudio()" class="bg-white/90 hover:bg-sky-50 text-sky-600 p-3 rounded-full shadow-md border border-sky-100 transition duration-300 flex items-center justify-center gap-2">
-                <i id="musicIcon" class="fa-solid fa-music text-lg"></i>
-                <span id="musicText" class="text-xs font-bold hidden sm:inline">Putar Musik 🎵</span>
+
+        <div class="flex items-center gap-2 sm:gap-3">
+            <button id="musicBtn" onclick="toggleAudio()" class="bg-white/90 hover:bg-sky-50 text-sky-600 p-3 rounded-full shadow-md border-2 border-sky-200 transition flex items-center justify-center gap-2 group">
+                <i id="musicIcon" class="fa-solid fa-music text-base text-sky-500 group-hover:scale-125 transition"></i>
+                <span id="musicText" class="text-xs font-cute hidden md:inline">Chiptune Bday 🎵</span>
             </button>
-            <button onclick="triggerConfettiBurst()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold px-4 py-2.5 rounded-full shadow-md hover:shadow-lg transition duration-300 text-xs sm:text-sm flex items-center gap-2">
-                <span>🎉</span>
-                <span>Rayakan!</span>
+
+            <button onclick="floodLoveAndCats()" class="bg-gradient-to-r from-sky-400 to-blue-400 hover:from-sky-500 hover:to-blue-500 text-white font-cute px-4 py-3 rounded-full shadow-md hover:shadow-sky-300 transition text-xs sm:text-sm flex items-center gap-1.5 active:scale-95">
+                <span>🐱</span>
+                <span>Hujan Cinta & Balon!</span>
             </button>
         </div>
     </header>
 
     <main class="relative z-10 max-w-4xl mx-auto px-4 mt-6 flex flex-col items-center">
 
-        <section class="text-center w-full my-4">
-            <div class="inline-block bg-sky-100/80 text-sky-700 px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold tracking-wider uppercase mb-3 border border-sky-200 shadow-sm">
-                🎉 Sweet Seventeen Celebration 🎈
+        <!-- Title Section -->
+        <section class="text-center w-full my-4 relative">
+            <div class="inline-flex items-center gap-2 bg-white/90 border-2 border-sky-200 text-sky-600 px-5 py-1 rounded-full text-xs font-cute shadow-sm mb-3 animate-pulse">
+                <span>✨</span>
+                <span>Special 17th Birthday Celebration</span>
+                <span>✨</span>
             </div>
-            
-            <h1 class="font-cute text-4xl sm:text-6xl md:text-7xl text-sky-600 drop-shadow-sm mb-2 tracking-wide leading-tight">
-                happiest bday jejen! <span class="text-sky-400">🩵</span>
+
+            <h1 class="font-cute text-4xl sm:text-6xl md:text-7xl text-sky-500 drop-shadow-md mb-2 tracking-wide leading-tight">
+                happiest bday jejen! <span class="text-sky-300 inline-block animate-bounce-gentle">🩵</span>
             </h1>
-            
-            <p class="text-sky-800 text-base sm:text-xl font-medium max-w-lg mx-auto">
-                Selamat ulang tahun yang ke-<span class="font-bold text-sky-600 underline decoration-sky-300 decoration-wavy">17</span> untuk orang tersayang! ✨
+
+            <p class="font-handwriting text-sky-700 text-lg sm:text-2xl font-bold max-w-md mx-auto">
+                "Selamat Ulang Tahun Ke-17 Cewe Paling Imut & Gemoy! ✨"
             </p>
         </section>
 
-        <section class="w-full my-6 flex flex-col items-center">
-            <div class="bg-white/70 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-sky-100 shadow-xl w-full max-w-md text-center relative overflow-hidden">
-                <div class="absolute -top-10 -right-10 w-24 h-24 bg-sky-200/40 rounded-full blur-xl pointer-events-none"></div>
-                
-                <h3 class="font-cute text-sky-700 text-lg mb-1">Make a Wish & Tiup Lilinya! 🕯️</h3>
-                <p class="text-xs text-sky-500 mb-6">Klik lilin untuk meniup atau menyalakannya kembali</p>
-
-                <!-- SVG Interactive Cake -->
-                <div class="relative w-48 h-48 sm:w-56 sm:h-56 mx-auto cursor-pointer select-none group" onclick="toggleCandle()">
-                    <!-- Cake Container -->
-                    <div class="absolute inset-0 flex flex-col items-center justify-end">
-                        
-                        <!-- Candle & Flame -->
-                        <div class="relative z-20 flex flex-col items-center mb-1">
-                            <!-- Flame -->
-                            <div id="flame" class="flame w-5 h-7 bg-amber-400 rounded-full blur-[1px] shadow-[0_0_12px_rgba(251,191,36,0.9)] flex items-center justify-center relative">
-                                <div class="w-2 h-4 bg-yellow-100 rounded-full"></div>
-                            </div>
-                            <!-- Smoke (Hidden initially) -->
-                            <div id="smoke" class="hidden absolute -top-8 text-slate-400 text-xs animate-bounce">💨</div>
-                            <!-- Wick -->
-                            <div class="w-1 h-2 bg-slate-700"></div>
-                            <!-- Candle Stick -->
-                            <div class="w-3.5 h-12 bg-gradient-to-r from-sky-200 via-white to-sky-300 rounded-t-sm border-x border-sky-300 shadow-inner"></div>
-                        </div>
-
-                        <!-- Top Cream Layer -->
-                        <div class="w-40 sm:w-48 h-12 bg-sky-200 rounded-t-3xl relative z-10 border-t border-sky-100 shadow-sm flex justify-around items-center px-2">
-                            <!-- Cream Drips -->
-                            <div class="w-4 h-4 bg-sky-200 rounded-b-full absolute -bottom-2 left-4"></div>
-                            <div class="w-5 h-5 bg-sky-200 rounded-b-full absolute -bottom-3 left-14"></div>
-                            <div class="w-4 h-4 bg-sky-200 rounded-b-full absolute -bottom-2 right-12"></div>
-                            <div class="w-5 h-5 bg-sky-200 rounded-b-full absolute -bottom-3 right-4"></div>
-                            
-                            <!-- Strawberries / Toppings -->
-                            <span class="text-sm">🫐</span>
-                            <span class="text-xs">🤍</span>
-                            <span class="text-sm">🫐</span>
-                            <span class="text-xs">🤍</span>
-                            <span class="text-sm">🫐</span>
-                        </div>
-
-                        <!-- Cake Body -->
-                        <div class="w-44 sm:w-52 h-16 bg-white border-x border-sky-100 relative z-0 flex flex-col justify-center items-center shadow-inner">
-                            <div class="w-full h-3 bg-sky-300/40 my-1"></div>
-                            <div class="font-cute text-sky-400 text-xs tracking-widest uppercase">✨ Sweet 17 ✨</div>
-                        </div>
-
-                        <!-- Bottom Cake Layer -->
-                        <div class="w-48 sm:w-56 h-10 bg-sky-100 rounded-b-xl border-t border-sky-200 shadow-md flex items-center justify-center">
-                            <div class="w-full border-t border-dashed border-sky-300/60"></div>
-                        </div>
-
-                        <!-- Plate -->
-                        <div class="w-56 sm:w-64 h-4 bg-slate-100 rounded-full shadow-lg border border-slate-200 -mt-1"></div>
+        <!-- Cute Mascot Dialog -->
+        <section class="w-full my-3 flex justify-center items-center">
+            <div class="relative bg-white/90 backdrop-blur-md p-4 sm:p-5 rounded-3xl border-2 border-sky-200 shadow-lg max-w-lg w-full flex items-center gap-4 cursor-pointer hover:border-sky-300 transition" onclick="talkMascot()">
+                <div class="text-5xl sm:text-6xl animate-bounce-gentle select-none" id="mascotIcon">🐱</div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-2">
+                        <span class="font-cute text-sky-600 text-sm" id="mascotName">Mochi si Kucing</span>
+                        <span class="bg-sky-100 text-sky-500 text-[10px] px-2 py-0.5 rounded-full font-bold">Klik aku! 💬</span>
                     </div>
-                </div>
-
-                <div id="cakeStatusText" class="mt-4 text-xs font-semibold text-sky-600 bg-sky-50 py-1.5 px-3 rounded-full inline-block border border-sky-100">
-                    ✨ Lilin sedang menyala... Minta permohonanmu! 
+                    <p class="text-xs sm:text-sm text-sky-800 font-medium mt-1 leading-snug" id="mascotDialog">
+                        "Meow! Selamat 17 tahun Jejen! Coba tiup lilinnya di bawah yaa~ 🐾"
+                    </p>
                 </div>
             </div>
         </section>
 
+        <!-- Interactive Birthday Cake & Blow Mic Feature -->
+        <section class="w-full my-6 flex flex-col items-center">
+            <div class="bg-white/85 backdrop-blur-md p-6 sm:p-8 rounded-3xl border-2 border-sky-200 shadow-xl w-full max-w-md text-center relative overflow-hidden">
+                <div class="absolute top-2 right-3 text-2xl opacity-60">🎀</div>
+                <div class="absolute top-2 left-3 text-2xl opacity-60">✨</div>
+
+                <h3 class="font-cute text-sky-600 text-xl mb-1">Interactive Birthday Cake 🎂</h3>
+                <p class="text-xs text-sky-400 font-semibold mb-6">Klik lilin '17' atau tekan tombol tiup untuk padamkan api!</p>
+
+                <!-- Animated Cake -->
+                <div class="relative w-56 h-56 sm:w-64 sm:h-64 mx-auto cursor-pointer select-none group" onclick="blowCandle()">
+                    <div class="absolute inset-0 flex flex-col items-center justify-end">
+                        
+                        <!-- Flames & Candle '17' -->
+                        <div class="relative z-20 flex items-end justify-center gap-2 mb-1">
+                            <div class="relative flex flex-col items-center">
+                                <div id="flame1" class="flame-anim w-4 h-6 bg-amber-400 rounded-full blur-[1px] mb-0.5 flex items-center justify-center">
+                                    <div class="w-1.5 h-3 bg-yellow-100 rounded-full"></div>
+                                </div>
+                                <div class="font-cute text-2xl text-sky-600 bg-white px-2.5 py-0.5 rounded-lg border-2 border-sky-300 shadow-sm">1</div>
+                            </div>
+
+                            <div class="relative flex flex-col items-center">
+                                <div id="flame2" class="flame-anim w-4 h-6 bg-amber-400 rounded-full blur-[1px] mb-0.5 flex items-center justify-center">
+                                    <div class="w-1.5 h-3 bg-yellow-100 rounded-full"></div>
+                                </div>
+                                <div class="font-cute text-2xl text-sky-600 bg-white px-2.5 py-0.5 rounded-lg border-2 border-sky-300 shadow-sm">7</div>
+                            </div>
+                        </div>
+
+                        <!-- Cake Layers -->
+                        <div class="w-36 sm:w-40 h-10 bg-sky-200 rounded-t-2xl border-t-2 border-sky-100 relative z-10 flex justify-around items-center px-2 shadow-sm">
+                            <span class="text-xs">🫐</span>
+                            <span class="text-xs">🤍</span>
+                            <span class="text-xs">🍓</span>
+                            <span class="text-xs">🤍</span>
+                            <span class="text-xs">🫐</span>
+                        </div>
+
+                        <div class="w-44 sm:w-48 h-12 bg-white border-x-2 border-sky-100 relative z-0 flex flex-col justify-center items-center shadow-inner">
+                            <div class="w-full h-1.5 bg-pink-200 my-0.5"></div>
+                            <span class="font-cute text-sky-400 text-xs tracking-widest uppercase">✨ JEJEN 17TH ✨</span>
+                            <div class="w-full h-1.5 bg-sky-200 my-0.5"></div>
+                        </div>
+
+                        <div class="w-52 sm:w-56 h-12 bg-sky-100 rounded-b-xl border-t-2 border-sky-200 shadow-md flex items-center justify-around px-4">
+                            <span class="text-sm">🎀</span>
+                            <span class="text-xs font-cute text-sky-500">09-10-2009</span>
+                            <span class="text-sm">🎀</span>
+                        </div>
+
+                        <div class="w-60 sm:w-68 h-4 bg-slate-100 rounded-full shadow-lg border-2 border-slate-200 -mt-1"></div>
+                    </div>
+                </div>
+
+                <!-- Cake Action Controls -->
+                <div class="mt-5 flex flex-wrap justify-center gap-2">
+                    <button id="candleBtn" onclick="blowCandle()" class="bg-gradient-to-r from-sky-400 to-blue-400 hover:from-sky-500 hover:to-blue-500 text-white font-cute px-5 py-2.5 rounded-full text-xs shadow-md hover:scale-105 transition flex items-center gap-2">
+                        <span>💨</span>
+                        <span id="candleBtnText">Tiup Lilin!</span>
+                    </button>
+                    
+                    <button onclick="listenMicBlow()" class="bg-sky-100 hover:bg-sky-200 text-sky-600 font-cute px-4 py-2.5 rounded-full text-xs shadow-sm border border-sky-200 transition flex items-center gap-1.5">
+                        <span>🎙️</span>
+                        <span>Tiup Pakai Mic</span>
+                    </button>
+                </div>
+
+                <p id="cakeNotice" class="text-[11px] font-bold text-sky-500 mt-3 bg-sky-50 py-1.5 px-3 rounded-full inline-block border border-sky-100">
+                    Lilin sedang menyala... Minta 3 permohonan manis ya! 🕯️
+                </p>
+            </div>
+        </section>
+
+        <!-- Photobooth Gallery -->
         <section class="w-full my-8">
             <div class="text-center mb-6">
-                <h2 class="font-cute text-2xl sm:text-3xl text-sky-700">Memory Photostrip 📸</h2>
-                <p class="text-xs sm:text-sm text-sky-500">Momen-momen gemes Jejen di usia 17 tahun!</p>
+                <div class="inline-block bg-white/80 px-4 py-1 rounded-full text-sky-500 text-xs font-cute border border-sky-200 shadow-sm mb-1">
+                    📸 PHOTOBOOTH GALLERY
+                </div>
+                <h2 class="font-cute text-3xl sm:text-4xl text-sky-600">Jejen's Cute Gallery 🌸</h2>
+                <p class="text-xs sm:text-sm text-sky-500 font-medium">Klik atau usap foto untuk animasi bounce gemoy!</p>
             </div>
 
-            <!-- Grid of Cute Polaroids -->
+            <!-- Polaroid Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-2">
                 
                 <!-- Photo 1 -->
-                <div class="polaroid bg-white p-3 pt-4 rounded-2xl border border-sky-100 transform -rotate-2">
+                <div class="polaroid-frame bg-white p-3.5 pt-4 rounded-2xl border-2 border-sky-100 transform -rotate-2 relative cursor-pointer" onclick="bouncePhoto(this)">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-sky-200/90 text-[10px] font-bold px-3 py-0.5 rounded-full text-sky-700 z-10 border border-sky-300">📌 STICKER</div>
                     <div class="overflow-hidden rounded-xl bg-sky-50 aspect-[3/4] relative group">
-                        <img src="IMG-20260601-WA0019(1).jpg" alt="Jejen Cute 1" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='https://placehold.co/400x500/e0f2fe/0369a1?text=Jejen+Cute+1'">
-                        <div class="absolute top-2 right-2 bg-white/80 backdrop-blur-sm text-xs px-2 py-0.5 rounded-full text-sky-600 font-bold">🫰🏻</div>
+                        <img src="IMG-20260601-WA0019(1).jpg" alt="Jejen Photo 1" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='https://placehold.co/400x500/e0f2fe/0284c7?text=Jejen+Pose+1'">
+                        <div class="absolute bottom-2 left-2 bg-white/90 backdrop-blur-sm text-[10px] px-2 py-0.5 rounded-full text-sky-600 font-bold">🫰🏻 Finger Heart</div>
                     </div>
                     <div class="pt-3 pb-1 text-center">
-                        <p class="font-handwriting text-2xl text-sky-600 font-bold">Love Sign Jejen 💙</p>
-                        <p class="text-[10px] text-sky-400">Sweet Sixteen Memories</p>
+                        <p class="font-handwriting text-2xl text-sky-600 font-bold">Finger Heart 🩵</p>
+                        <p class="text-[10px] text-sky-400 font-semibold">Cute Level 1000%</p>
                     </div>
                 </div>
 
                 <!-- Photo 2 -->
-                <div class="polaroid bg-white p-3 pt-4 rounded-2xl border border-sky-100 transform rotate-2">
+                <div class="polaroid-frame bg-white p-3.5 pt-4 rounded-2xl border-2 border-sky-100 transform rotate-2 relative cursor-pointer" onclick="bouncePhoto(this)">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-pink-200/90 text-[10px] font-bold px-3 py-0.5 rounded-full text-pink-700 z-10 border border-pink-300">🎀 CUTE RIBBON</div>
                     <div class="overflow-hidden rounded-xl bg-sky-50 aspect-[3/4] relative group">
-                        <img src="IMG-20260522-WA0102.jpg" alt="Jejen Cute 2" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='https://placehold.co/400x500/e0f2fe/0369a1?text=Jejen+Cute+2'">
-                        <div class="absolute top-2 right-2 bg-white/80 backdrop-blur-sm text-xs px-2 py-0.5 rounded-full text-sky-600 font-bold">✨</div>
+                        <img src="IMG-20260522-WA0102.jpg" alt="Jejen Photo 2" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='https://placehold.co/400x500/e0f2fe/0284c7?text=Jejen+Pose+2'">
+                        <div class="absolute bottom-2 left-2 bg-white/90 backdrop-blur-sm text-[10px] px-2 py-0.5 rounded-full text-sky-600 font-bold">✨ Photogrid</div>
                     </div>
                     <div class="pt-3 pb-1 text-center">
-                        <p class="font-handwriting text-2xl text-sky-600 font-bold">Gemes Gang 🌸</p>
-                        <p class="text-[10px] text-sky-400">Pretty Grid Angles</p>
+                        <p class="font-handwriting text-2xl text-sky-600 font-bold">Gemes Grid 🌸</p>
+                        <p class="text-[10px] text-sky-400 font-semibold">Sweet 17 Angles</p>
                     </div>
                 </div>
 
                 <!-- Photo 3 -->
-                <div class="polaroid bg-white p-3 pt-4 rounded-2xl border border-sky-100 transform -rotate-1">
+                <div class="polaroid-frame bg-white p-3.5 pt-4 rounded-2xl border-2 border-sky-100 transform -rotate-1 relative cursor-pointer" onclick="bouncePhoto(this)">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-200/90 text-[10px] font-bold px-3 py-0.5 rounded-full text-amber-800 z-10 border border-amber-300">🐾 CAT CHEEK</div>
                     <div class="overflow-hidden rounded-xl bg-sky-50 aspect-[3/4] relative group">
-                        <img src="IMG-20251215-WA0065.jpg" alt="Jejen Cute 3" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='https://placehold.co/400x500/e0f2fe/0369a1?text=Jejen+Cute+3'">
-                        <div class="absolute top-2 right-2 bg-white/80 backdrop-blur-sm text-xs px-2 py-0.5 rounded-full text-sky-600 font-bold">🐱</div>
+                        <img src="IMG-20251215-WA0065.jpg" alt="Jejen Photo 3" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='https://placehold.co/400x500/e0f2fe/0284c7?text=Jejen+Pose+3'">
+                        <div class="absolute bottom-2 left-2 bg-white/90 backdrop-blur-sm text-[10px] px-2 py-0.5 rounded-full text-sky-600 font-bold">🐱 Meow Pose</div>
                     </div>
                     <div class="pt-3 pb-1 text-center">
-                        <p class="font-handwriting text-2xl text-sky-600 font-bold">Cute Pose 🐾</p>
-                        <p class="text-[10px] text-sky-400">Cat Cheek Sticker</p>
+                        <p class="font-handwriting text-2xl text-sky-600 font-bold">Kitten Vibe 🐾</p>
+                        <p class="text-[10px] text-sky-400 font-semibold">Too Cute To Handle</p>
                     </div>
                 </div>
 
                 <!-- Photo 4 -->
-                <div class="polaroid bg-white p-3 pt-4 rounded-2xl border border-sky-100 transform rotate-3">
+                <div class="polaroid-frame bg-white p-3.5 pt-4 rounded-2xl border-2 border-sky-100 transform rotate-3 relative cursor-pointer" onclick="bouncePhoto(this)">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-200/90 text-[10px] font-bold px-3 py-0.5 rounded-full text-emerald-800 z-10 border border-emerald-300">✌️ PEACE SIGN</div>
                     <div class="overflow-hidden rounded-xl bg-sky-50 aspect-[3/4] relative group">
-                        <img src="IMG-20260510-WA0028.jpg" alt="Jejen Cute 4" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='https://placehold.co/400x500/e0f2fe/0369a1?text=Jejen+Cute+4'">
-                        <div class="absolute top-2 right-2 bg-white/80 backdrop-blur-sm text-xs px-2 py-0.5 rounded-full text-sky-600 font-bold">✌️</div>
+                        <img src="IMG-20260510-WA0028.jpg" alt="Jejen Photo 4" class="w-full h-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='https://placehold.co/400x500/e0f2fe/0284c7?text=Jejen+Pose+4'">
+                        <div class="absolute bottom-2 left-2 bg-white/90 backdrop-blur-sm text-[10px] px-2 py-0.5 rounded-full text-sky-600 font-bold">😁 Smile Always</div>
                     </div>
                     <div class="pt-3 pb-1 text-center">
-                        <p class="font-handwriting text-2xl text-sky-600 font-bold">Peace Sign 😁</p>
-                        <p class="text-[10px] text-sky-400">Always Smiling Girl</p>
+                        <p class="font-handwriting text-2xl text-sky-600 font-bold">Peace & Smile 😁</p>
+                        <p class="text-[10px] text-sky-400 font-semibold">Brightest Energy</p>
                     </div>
                 </div>
 
             </div>
         </section>
 
+        <!-- Romantic Birthday Wishes Card (Contains Soft Subtle 'i miss u') -->
         <section class="w-full my-6">
-            <div class="bg-white/80 backdrop-blur-md p-6 sm:p-10 rounded-3xl border border-sky-100 shadow-xl relative overflow-hidden">
-                <!-- Decorative Top Ribbon -->
-                <div class="absolute top-0 left-1/2 -translate-x-1/2 bg-sky-400 text-white text-xs font-bold px-6 py-1 rounded-b-xl shadow-sm">
-                    💌 DOA & UCAPAN SPESIAL
-                </div>
+            <div class="bg-white/90 backdrop-blur-md p-6 sm:p-10 rounded-3xl border-2 border-sky-200 shadow-xl relative overflow-hidden">
+                <div class="absolute -right-8 -top-8 w-28 h-28 bg-sky-100 rounded-full blur-2xl pointer-events-none"></div>
 
-                <div class="mt-4 text-center">
-                    <h3 class="font-cute text-2xl sm:text-3xl text-sky-700 mb-4">Untuk Jejen Tersayang, 💖</h3>
-                    
+                <div class="text-center">
+                    <span class="bg-sky-100 text-sky-600 text-xs font-cute px-4 py-1 rounded-full border border-sky-200">
+                        💌 SURAT DOA & HARAPAN SPESIAL
+                    </span>
+
+                    <h3 class="font-cute text-2xl sm:text-4xl text-sky-600 mt-3 mb-4">
+                        Happiest Bday Jejen! ✨
+                    </h3>
+
                     <div class="space-y-4 text-sky-800 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto text-justify sm:text-center font-medium">
                         <p>
-                            Selamat ulang tahun yang ke-17, Jejen! 🎂✨ Di usiamu yang baru dan spesial ini (Sweet Seventeen), semoga harimu selalu dipenuhi dengan kebahagiaan, senyuman manis, dan tawa yang tak pernah pudar.
+                            Selamat ulang tahun yang ke-17 ya manis (09 Oktober 2009). Semoga di usiamu yang ke-17 ini, harimu selalu dipenuhi senyum manis, kebahagiaan, dan segala hal indah di dunia.
                         </p>
                         <p>
-                            Doaku untukmu, semoga kamu selalu diberikan kesehatan, kelancaran dalam segala hal yang kamu impikan, perlindungan dari Tuhan, dan tumbuh menjadi pribadi yang semakin hebat, penyabar, serta penuh kasih sayang.
-                        </p>
-                        <p>
-                            Terima kasih sudah menjadi sosok yang selalu mewarnai hari-hari dengan kebaikan dan ketulusanmu. Semoga di umur 17 tahun ini, setiap langkahmu dipenuhi keberkahan dan kejutan-kejutan manis dari alam semesta.
+                            Tetap jadi Jejen yang lucu, gemoy, dan menggemaskan. Semoga langkahmu selalu dipermudah, diberikan kesehatan yang melimpah, dan cita-citamu tercapai satu per satu! <span class="subtle-miss-u" title="✨">i miss u</span> Semoga hari-harimu senantiasa sehangat dan seindah senyumanmu. 🩵
                         </p>
                     </div>
 
-                    <!-- Subtle hidden Easter egg text built into the wish paragraph (Low visibility requirement) -->
-                    <div class="mt-6 flex justify-center items-center gap-2">
-                        <span class="text-xs text-sky-400/80">Selalu ada doa terbaik untukmu.</span>
-                        <!-- Hidden "i miss u" subtle watermark -->
-                        <span class="secret-subtle-text text-[11px] italic tracking-widest cursor-pointer" title="Bisikan rahasia...">
-                            (i miss u)
-                        </span>
-                    </div>
-
-                    <!-- Action Button to Open Secret Letter -->
+                    <!-- Interactive Hug Button -->
                     <div class="mt-8 flex justify-center">
-                        <button onclick="openModal()" class="bg-gradient-to-r from-sky-400 to-blue-500 hover:from-sky-500 hover:to-blue-600 text-white font-bold px-6 py-3 rounded-full shadow-lg hover:shadow-sky-200 hover:scale-105 transition duration-300 flex items-center gap-2 text-sm sm:text-base">
-                            <span>✉️</span>
-                            <span>Buka Surat Rahasia Jejen</span>
+                        <button onclick="sendVirtualHug()" class="bg-gradient-to-r from-sky-400 to-blue-400 hover:from-sky-500 hover:to-blue-500 text-white font-cute px-6 py-3 rounded-full shadow-md hover:scale-105 active:scale-95 transition text-xs sm:text-sm flex items-center gap-2">
+                            <span>🫂</span>
+                            <span>Kirim Peluk & Cinta Online!</span>
                         </button>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="w-full my-6">
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <div class="bg-white/80 p-4 rounded-2xl border border-sky-100 shadow-md text-center">
-                    <div class="text-2xl font-cute text-sky-500">17</div>
-                    <div class="text-xs text-sky-700 font-semibold mt-1">Tahun Usia</div>
-                </div>
-                <div class="bg-white/80 p-4 rounded-2xl border border-sky-100 shadow-md text-center">
-                    <div class="text-2xl font-cute text-sky-500">204</div>
-                    <div class="text-xs text-sky-700 font-semibold mt-1">Bulan Ceria</div>
-                </div>
-                <div class="bg-white/80 p-4 rounded-2xl border border-sky-100 shadow-md text-center">
-                    <div class="text-2xl font-cute text-sky-500">6.209+</div>
-                    <div class="text-xs text-sky-700 font-semibold mt-1">Hari Indah</div>
-                </div>
-                <div class="bg-white/80 p-4 rounded-2xl border border-sky-100 shadow-md text-center">
-                    <div class="text-2xl font-cute text-sky-500">∞</div>
-                    <div class="text-xs text-sky-700 font-semibold mt-1">Doa Baik</div>
                 </div>
             </div>
         </section>
 
     </main>
 
-    <div id="secretModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-white rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl border-2 border-sky-100 relative transform scale-95 transition-transform duration-300" id="modalCard">
-            <!-- Close Button -->
-            <button onclick="closeModal()" class="absolute top-4 right-4 bg-sky-50 hover:bg-sky-100 text-sky-600 rounded-full w-8 h-8 flex items-center justify-center font-bold transition">
-                ✕
-            </button>
-
-            <div class="text-center">
-                <div class="text-4xl mb-2">💌</div>
-                <h3 class="font-cute text-2xl text-sky-600 mb-1">Pesan Rahasia Buat Jejen</h3>
-                <p class="text-xs text-sky-400 mb-4">09 Oktober 2009 — Sweet 17th Birthday</p>
-
-                <div class="bg-sky-50/70 p-4 rounded-2xl text-left text-sky-800 text-sm leading-relaxed space-y-3 border border-sky-100 font-medium">
-                    <p>
-                        Halo Jejen! ✨
-                    </p>
-                    <p>
-                        Di hari ulang tahun ke-17 ini, aku cuma mau nyampein betapa berharganya kamu. Semoga tahun ini membawa banyak hal manis, kesempatan baru, dan momen-momen yang bikin kamu makin sering tersenyum lebar!
-                    </p>
-                    <p>
-                        Tetap jadi Jejen yang lucu, ceria, dan apa adanya ya. Apapun impian yang lagi kamu raih, semoga jalanmu selalu dimudahkan. 
-                    </p>
-                    <!-- Subtle / Soft "i miss u" hint hidden in interactive heart button -->
-                    <div class="pt-2 flex justify-between items-center border-t border-sky-200/60 mt-3">
-                        <span class="text-xs font-bold text-sky-500">Dari seseorang yang selalu mendoakanmu 🤍</span>
-                        <button id="secretHeartBtn" onclick="toggleSecretHint()" class="text-xs bg-white hover:bg-sky-100 text-sky-400 px-2.5 py-1 rounded-full border border-sky-200 transition">
-                            <span id="secretHeartText">Klik pesan tersembunyi 🤫</span>
-                        </button>
-                    </div>
-                    
-                    <div id="secretHintBox" class="hidden text-center py-2 bg-sky-100/80 rounded-xl text-sky-600 font-semibold text-xs animate-pulse">
-                        ✨ <span class="tracking-wider">i miss u so much, Jejen! 🩵</span> ✨
-                    </div>
-                </div>
-
-                <div class="mt-6 flex justify-center gap-3">
-                    <button onclick="triggerConfettiBurst(); closeModal();" class="bg-sky-500 hover:bg-sky-600 text-white font-bold px-5 py-2.5 rounded-full text-xs sm:text-sm shadow-md transition">
-                        Kirim Peluk & Konfeti! 🎉
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <footer class="text-center py-6 text-xs text-sky-500 relative z-10">
-        <p>Created with 🩵 for Jejen's 17th Birthday • 09 Oktober 2009</p>
-        <!-- Very faint text in footer for extra requirement compliance -->
-        <p class="secret-subtle-text text-[9px] mt-1">i miss u</p>
+    <footer class="text-center py-6 text-xs text-sky-500 relative z-10 font-medium">
+        <p>Happiest Birthday Jejen • Sweet 17th • 09 Oktober 2009 🩵</p>
     </footer>
 
     <script>
-        let isCandleLit = true;
-        let isPlayingAudio = false;
-        let audioCtx = null;
-        let melodyInterval = null;
+        // --- 1. SPARKLE CURSOR TRAIL ---
+        const canvas = document.getElementById('trailCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
 
-        // Sound Synthesis for Birthday Tune (Web Audio API)
-        function playTuneNote(freq, duration) {
-            if (!audioCtx) return;
-            try {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                
-                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
-                
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                
-                osc.start();
-                osc.stop(audioCtx.currentTime + duration);
-            } catch(e) {
-                console.log(e);
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 8 + 3;
+                this.speedX = (Math.random() - 0.5) * 2;
+                this.speedY = (Math.random() - 0.5) * 2 - 1;
+                this.color = ['#38bdf8', '#7dd3fc', '#bae6fd', '#f472b6', '#fef08a'][Math.floor(Math.random() * 5)];
+                this.alpha = 1;
+                this.decay = Math.random() * 0.03 + 0.015;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.alpha -= this.decay;
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, this.alpha);
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
             }
         }
 
-        const happyBirthdayNotes = [
-            { f: 261.63, d: 0.4 }, { f: 261.63, d: 0.4 }, { f: 293.66, d: 0.8 }, { f: 261.63, d: 0.8 }, { f: 349.23, d: 0.8 }, { f: 329.63, d: 1.2 },
-            { f: 261.63, d: 0.4 }, { f: 261.63, d: 0.4 }, { f: 293.66, d: 0.8 }, { f: 261.63, d: 0.8 }, { f: 392.00, d: 0.8 }, { f: 349.23, d: 1.2 },
-            { f: 261.63, d: 0.4 }, { f: 261.63, d: 0.4 }, { f: 523.25, d: 0.8 }, { f: 440.00, d: 0.8 }, { f: 349.23, d: 0.8 }, { f: 329.63, d: 0.8 }, { f: 293.66, d: 0.8 }
+        window.addEventListener('mousemove', (e) => {
+            if (Math.random() < 0.6) particles.push(new Particle(e.clientX, e.clientY));
+        });
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) particles.push(new Particle(e.touches[0].clientX, e.touches[0].clientY));
+        });
+
+        function animateTrail() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].alpha <= 0) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+            requestAnimationFrame(animateTrail);
+        }
+        animateTrail();
+
+        // --- 2. MASCOT TALK ---
+        const mascotDialogs = [
+            { icon: "🐱", name: "Mochi si Kucing", text: "Meow! Selamat 17 tahun Jejen! Coba tiup lilinnya di bawah yaa~ 🐾" },
+            { icon: "🐰", name: "Choco si Kelinci", text: "Jejen hari ini kelihatan makin gemoy dan cantik banget deh! 🌸" },
+            { icon: "🐻", name: "Bobi si Beruang", text: "Semoga di umur 17 tahun ini semua impian Jejen tercapai yaa! ✨" },
+            { icon: "🐥", name: "Pipo si Anak Ayam", text: "Klip-klip! Selamat ulang tahun Jejen manis! 🩵" }
         ];
+        let mascotIndex = 0;
 
-        function startMelody() {
-            let noteIdx = 0;
-            if (melodyInterval) clearInterval(melodyInterval);
-            
-            melodyInterval = setInterval(() => {
-                if (!isPlayingAudio) return;
-                const note = happyBirthdayNotes[noteIdx];
-                playTuneNote(note.f, note.d);
-                noteIdx = (noteIdx + 1) % happyBirthdayNotes.length;
-            }, 600);
+        function talkMascot() {
+            mascotIndex = (mascotIndex + 1) % mascotDialogs.length;
+            const item = mascotDialogs[mascotIndex];
+            document.getElementById('mascotIcon').textContent = item.icon;
+            document.getElementById('mascotName').textContent = item.name;
+            document.getElementById('mascotDialog').textContent = item.text;
+            playCuteBeep();
         }
 
-        function toggleAudio() {
-            const btnText = document.getElementById('musicText');
-            const btnIcon = document.getElementById('musicIcon');
-
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-
-            isPlayingAudio = !isPlayingAudio;
-
-            if (isPlayingAudio) {
-                btnText.textContent = "Matikan Musik 🎵";
-                btnIcon.className = "fa-solid fa-volume-high text-lg text-sky-500 animate-pulse";
-                startMelody();
-            } else {
-                btnText.textContent = "Putar Musik 🎵";
-                btnIcon.className = "fa-solid fa-music text-lg";
-                if (melodyInterval) clearInterval(melodyInterval);
-            }
-        }
-
-        function toggleCandle() {
-            const flame = document.getElementById('flame');
-            const smoke = document.getElementById('smoke');
-            const statusText = document.getElementById('cakeStatusText');
-
-            isCandleLit = !isCandleLit;
-
-            if (!isCandleLit) {
-                // Blow out
-                flame.classList.add('hidden');
-                smoke.classList.remove('hidden');
-                statusText.innerHTML = "🎉 Yeay! Semoga permohonan Jejen dikabulkan! ✨";
-                statusText.className = "mt-4 text-xs font-semibold text-emerald-600 bg-emerald-50 py-1.5 px-3 rounded-full inline-block border border-emerald-100";
-                
-                triggerConfettiBurst();
-            } else {
-                // Light up
-                flame.classList.remove('hidden');
-                smoke.classList.add('hidden');
-                statusText.innerHTML = "✨ Lilin sedang menyala... Minta permohonanmu!";
-                statusText.className = "mt-4 text-xs font-semibold text-sky-600 bg-sky-50 py-1.5 px-3 rounded-full inline-block border border-sky-100";
-            }
-        }
-
-        function triggerConfettiBurst() {
-            if (typeof confetti === 'function') {
-                // Left & Right Cannon
-                confetti({
-                    particleCount: 70,
-                    spread: 60,
-                    origin: { y: 0.7, x: 0.2 },
-                    colors: ['#38bdf8', '#bae6fd', '#ffffff', '#60a5fa']
-                });
-                confetti({
-                    particleCount: 70,
-                    spread: 60,
-                    origin: { y: 0.7, x: 0.8 },
-                    colors: ['#38bdf8', '#bae6fd', '#ffffff', '#60a5fa']
-                });
-            }
-        }
-
-        function openModal() {
-            const modal = document.getElementById('secretModal');
-            const modalCard = document.getElementById('modalCard');
-            modal.classList.remove('hidden');
+        // --- 3. PHOTO BOUNCE ANIMATION ---
+        function bouncePhoto(el) {
+            el.style.transform = 'scale(1.08) rotate(0deg)';
+            playCuteBeep();
             setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                modalCard.classList.remove('scale-95');
-                modalCard.classList.add('scale-100');
-            }, 10);
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('secretModal');
-            const modalCard = document.getElementById('modalCard');
-            modal.classList.add('opacity-0');
-            modalCard.classList.remove('scale-100');
-            modalCard.classList.add('scale-95');
-            setTimeout(() => {
-                modal.classList.add('hidden');
+                el.style.transform = '';
             }, 300);
         }
 
-        function toggleSecretHint() {
-            const hintBox = document.getElementById('secretHintBox');
-            const heartText = document.getElementById('secretHeartText');
-            
-            if (hintBox.classList.contains('hidden')) {
-                hintBox.classList.remove('hidden');
-                heartText.textContent = "Pesan tersembunyi terbuka! 💙";
-                triggerConfettiBurst();
+        // --- 4. CANDLE BLOWING & MIC DETECT ---
+        let isCandleLit = true;
+
+        function blowCandle() {
+            const flame1 = document.getElementById('flame1');
+            const flame2 = document.getElementById('flame2');
+            const notice = document.getElementById('cakeNotice');
+            const btnText = document.getElementById('candleBtnText');
+
+            if (isCandleLit) {
+                flame1.classList.add('hidden');
+                flame2.classList.add('hidden');
+                notice.innerHTML = "🎉 Yeay! Lilin berhasil ditiup! Semoga permohonan Jejen terkabul! ✨";
+                notice.className = "text-[11px] font-bold text-emerald-600 mt-3 bg-emerald-50 py-1.5 px-3 rounded-full inline-block border border-emerald-200";
+                btnText.textContent = "Nyalakan Lilin 🕯️";
+                isCandleLit = false;
+                triggerHugeConfetti();
             } else {
-                hintBox.classList.add('hidden');
-                heartText.textContent = "Klik pesan tersembunyi 🤫";
+                flame1.classList.remove('hidden');
+                flame2.classList.remove('hidden');
+                notice.innerHTML = "Lilin sedang menyala... Minta 3 permohonan manis ya! 🕯️";
+                notice.className = "text-[11px] font-bold text-sky-500 mt-3 bg-sky-50 py-1.5 px-3 rounded-full inline-block border border-sky-100";
+                btnText.textContent = "Tiup Lilin!";
+                isCandleLit = true;
+            }
+            playCuteBeep();
+        }
+
+        function listenMicBlow() {
+            navigator.mediaDevices?.getUserMedia({ audio: true }).then(stream => {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const analyser = audioContext.createAnalyser();
+                const microphone = audioContext.createMediaStreamSource(stream);
+                const javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
+
+                analyser.smoothingTimeConstant = 0.8;
+                analyser.fftSize = 1024;
+
+                microphone.connect(analyser);
+                analyser.connect(javascriptNode);
+                javascriptNode.connect(audioContext.destination);
+
+                document.getElementById('cakeNotice').innerText = "🎙️ Tiup ke arah mik HP/Laptopmu sekarang!";
+
+                javascriptNode.onaudioprocess = function() {
+                    const array = new Uint8Array(analyser.frequencyBinCount);
+                    analyser.getByteFrequencyData(array);
+                    let values = 0;
+                    for (let i = 0; i < array.length; i++) values += array[i];
+                    let average = values / array.length;
+
+                    if (average > 40 && isCandleLit) {
+                        blowCandle();
+                        stream.getTracks().forEach(track => track.stop());
+                    }
+                };
+            }).catch(() => {
+                alert("Akses mic gagal, klik tombol tiup lilin biasa aja yaa! 💨");
+            });
+        }
+
+        function triggerHugeConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 120,
+                    spread: 80,
+                    origin: { y: 0.6 },
+                    colors: ['#38bdf8', '#7dd3fc', '#bae6fd', '#f472b6', '#fef08a']
+                });
             }
         }
 
-        // Auto Confetti on Load
+        // --- 5. FLOOD CAT & LOVE ---
+        function floodLoveAndCats() {
+            triggerHugeConfetti();
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const el = document.createElement('div');
+                    el.innerText = ['🐱', '🩵', '🤍', '☁️', '🧸', '🌸', '🎈'][Math.floor(Math.random() * 7)];
+                    el.style.position = 'fixed';
+                    el.style.left = Math.random() * 90 + 5 + 'vw';
+                    el.style.bottom = '-30px';
+                    el.style.fontSize = Math.random() * 24 + 24 + 'px';
+                    el.style.zIndex = '9999';
+                    el.style.transition = 'all 3.5s ease-out';
+                    el.style.pointerEvents = 'none';
+                    document.body.appendChild(el);
+
+                    setTimeout(() => {
+                        el.style.transform = `translateY(-${window.innerHeight + 80}px) rotate(${Math.random() * 360}deg)`;
+                        el.style.opacity = '0';
+                    }, 50);
+
+                    setTimeout(() => { el.remove(); }, 3600);
+                }, i * 100);
+            }
+        }
+
+        function sendVirtualHug() {
+            floodLoveAndCats();
+        }
+
+        // --- 6. AUDIO SYNTHESIZER ---
+        let audioCtx = null;
+        let isPlaying = false;
+        let melodyLoop = null;
+
+        function playCuteBeep() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.12);
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.12);
+        }
+
+        const happyTune = [
+            { f: 392.00, d: 0.25 }, { f: 392.00, d: 0.25 }, { f: 440.00, d: 0.4 }, { f: 392.00, d: 0.4 }, { f: 523.25, d: 0.4 }, { f: 493.88, d: 0.7 },
+            { f: 392.00, d: 0.25 }, { f: 392.00, d: 0.25 }, { f: 440.00, d: 0.4 }, { f: 392.00, d: 0.4 }, { f: 587.33, d: 0.4 }, { f: 523.25, d: 0.7 }
+        ];
+
+        function toggleAudio() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            isPlaying = !isPlaying;
+            const musicText = document.getElementById('musicText');
+            const musicIcon = document.getElementById('musicIcon');
+
+            if (isPlaying) {
+                musicText.textContent = "Matikan Audio 🎵";
+                musicIcon.className = "fa-solid fa-volume-high text-sky-500 animate-pulse";
+                let idx = 0;
+                melodyLoop = setInterval(() => {
+                    if (!isPlaying) return;
+                    const note = happyTune[idx];
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.value = note.f;
+                    gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + note.d);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + note.d);
+                    idx = (idx + 1) % happyTune.length;
+                }, 450);
+            } else {
+                musicText.textContent = "Chiptune Bday 🎵";
+                musicIcon.className = "fa-solid fa-music text-sky-500";
+                if (melodyLoop) clearInterval(melodyLoop);
+            }
+        }
+
         window.onload = function() {
-            setTimeout(() => {
-                triggerConfettiBurst();
-            }, 500);
+            setTimeout(triggerHugeConfetti, 400);
         };
     </script>
 </body>
